@@ -50,6 +50,32 @@ public class Calculator {
         return true;
     }
 
+    // New: scientific calculation helper supporting common functions
+    static double scientific(String op, double a, Double b) {
+        String o = op.toLowerCase();
+        switch (o) {
+            case "sin": return sine(a);
+            case "cos": return cosine(a);
+            case "tan": return tangent(a);
+            case "asin": return Math.toDegrees(Math.asin(a));
+            case "acos": return Math.toDegrees(Math.acos(a));
+            case "atan": return Math.toDegrees(Math.atan(a));
+            case "sinh": return Math.sinh(Math.toRadians(a));
+            case "cosh": return Math.cosh(Math.toRadians(a));
+            case "tanh": return Math.tanh(Math.toRadians(a));
+            case "exp": return Math.exp(a);
+            case "10^": return power(10, a);
+            case "pow":
+                if (b == null) throw new IllegalArgumentException("pow requires two operands");
+                return power(a, b);
+            case "sqrt": return squareRoot(a);
+            case "ln": return naturalLog(a);
+            case "log": return log(a);
+            case "abs": return Math.abs(a);
+            default: throw new IllegalArgumentException("Unknown scientific operation: " + op);
+        }
+    }
+
     static void printMenu() {
         System.out.println("\n===== JAVA CALCULATOR =====");
         System.out.println("--- Basic ---");
@@ -70,6 +96,7 @@ public class Calculator {
         System.out.println("--- Other ---");
         System.out.println(" 13. Factorial       (n!)");
         System.out.println(" 14. Prime Check     (is n prime?)");
+        System.out.println(" 15. Scientific      (sin, cos, tan, sqrt, ln, log, exp, pow)");
         System.out.println("  0. Exit");
         System.out.println("===========================");
         System.out.print("Choose an option: ");
@@ -161,11 +188,30 @@ public class Calculator {
                         System.out.printf("Result: %d is %s%n", n, isPrime(n) ? "PRIME" : "NOT PRIME");
                         break;
                     }
+
+                    case 15: {
+                        System.out.print("Enter operation (sin, cos, tan, sqrt, ln, log, exp, pow): ");
+                        String op = sc.next();
+                        System.out.print("Enter first operand: ");
+                        double a = sc.nextDouble();
+                        Double b = null;
+                        if (op.equalsIgnoreCase("pow")) {
+                            System.out.print("Enter second operand: ");
+                            b = sc.nextDouble();
+                        }
+                        double res = scientific(op, a, b);
+                        if (b == null)
+                            System.out.printf("Result: %s(%.4f) = %.6f%n", op, a, res);
+                        else
+                            System.out.printf("Result: %s(%.4f, %.4f) = %.6f%n", op, a, b, res);
+                        break;
+                    }
+
                     case 0:
                         System.out.println("Goodbye!");
                         break;
                     default:
-                        System.out.println("Invalid option. Please choose 0-14.");
+                        System.out.println("Invalid option. Please choose 0-15.");
                 }
             } catch (ArithmeticException e) {
                 System.out.println("Math Error: " + e.getMessage());
