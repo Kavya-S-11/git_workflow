@@ -109,7 +109,11 @@ public class Calculator {
         do {
             printMenu();
             choice = sc.nextInt();
-
+            // Handle user's menu choice.
+            // Note: Scanner.nextInt() reads only the number token and leaves the line terminator
+            // in the input stream; subsequent nextLine()/next() calls will still work for token-based reads.
+            // The switch below is wrapped in a try/catch to separate calculation errors (ArithmeticException)
+            // from general input/parsing errors. Valid choices are 0-15; 0 exits the loop.
             try {
                 switch (choice) {
                     case 1: {
